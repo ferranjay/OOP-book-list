@@ -46,6 +46,14 @@ UI.prototype.showAlert =  function(message, className) {
     }, 3000);
 }
 
+// delete book 
+UI.prototype.deleteBook = function(target) {
+    if(target.className === 'delete'){
+        // parent reversing deleting the right DOM part
+        target.parentElement.parentElement.remove();
+    }
+}
+
 
 // clear fields
 UI.prototype.clearfields = function(){
@@ -54,7 +62,7 @@ UI.prototype.clearfields = function(){
     document.getElementById('isbn').value = '';
 }
 
-// Event Listeners
+// Event Listener for adding a  book
 document.getElementById('book-form').addEventListener('submit', 
 function(e){
     // get form values (inputs)
@@ -86,9 +94,24 @@ function(e){
 
     }
     
-    
     e.preventDefault();
 });
+
+
+// Event listener for deleting a book
+document.getElementById('book-list').addEventListener(`click`, function(e){
+
+    // instantiate UI 
+    const ui = new UI();
+
+    ui.deleteBook(e.target);
+
+    // show alert
+    ui.showAlert('book has been removed', 'remove');
+
+    e.preventDefault();
+});
+
 
 
 
@@ -161,3 +184,7 @@ function(e){
 //      }
 // 
 // 10. after this we continue to making the alert message // validate & showAlert
+//
+// 11. create an event listener for deleting a book
+//      we need to target the x (delete button)
+//      we will do this within a prototype method of UI
