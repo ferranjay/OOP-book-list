@@ -56,6 +56,58 @@ class UI {
 }
 
 
+// Local Storage Class
+class store {
+
+    // Usually, static methods are used to implement functions that belong to the class, but not to any particular object of it.
+    static displayBooks(){
+        let books;
+        if(localStorage.getItem('books') === null) {
+            book = [];
+        } else {
+            books = JSON.parse(localStorage.getItem('books'));
+        }
+    }
+
+    static displayBooks() {
+        const book = Store.getBooks();
+
+        books.forEach(function(book){
+            const ui = new UI;
+        
+        // add book to UI
+        ui.addBookToList(book);
+        })
+    }
+
+    static addBook() {
+        const book = Store.getBooks();
+
+        books.push(book);
+
+        localStorage.setItem('books', JSON.stringify(books));
+    }
+
+    static removeBook(isbn) {
+        const books = Store.getBooks();
+
+        books.forEach(function(book, index){
+            if(book.isbn === isbn){
+                book.splice(index, 1);
+            }
+        });
+
+        localStorage.setItem('books', JSON.stringify(books));
+    }
+}
+
+
+
+// DOM load event
+document.addEventListener('DOMContentLoaded', Store.displayBooks);
+
+
+
 // Event Listener for adding a  book
 document.getElementById('book-form').addEventListener('submit', 
 function(e){
@@ -80,6 +132,9 @@ function(e){
     // add book to list 
     ui.addBookToList(book);
 
+    // Add to local storage
+    Store.addBook(book);
+
     // show success
     ui.showAlert('book added!', 'success');
     
@@ -92,6 +147,7 @@ function(e){
 });
 
 
+
 // Event listener for deleting a book
 document.getElementById('book-list').addEventListener(`click`, function(e){
 
@@ -99,6 +155,9 @@ document.getElementById('book-list').addEventListener(`click`, function(e){
     const ui = new UI();
 
     ui.deleteBook(e.target);
+
+    // Remove from LS
+    Store.removeBook(e.target.parentElement.previousElementSibling.textContent);
 
     // show alert
     ui.showAlert('book has been removed', 'remove');
